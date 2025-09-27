@@ -24,13 +24,13 @@ A comprehensive ML systems demonstration platform featuring self-driving simulat
 ## 🏗️ Architecture
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   Backend       │    │   Models        │
-│   React + TS    │◄──►│   FastAPI       │◄──►│   ONNX Models   │
-│   Vite + Tailwind│    │   PyTorch       │    │   YOLOv8        │
-│   Three.js      │    │   WebSocket     │    │   DeepLab       │
-└─────────────────┘    └─────────────────┘    │   PointPillars  │
-                                              └─────────────────┘
+ ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+ │   Frontend      │    │   Backend       │    │   Models        │
+ │   React + TS    │◄──►│   FastAPI       │◄──►│   ONNX Models   │
+ │ Vite + Tailwind │    │   PyTorch       │    │   YOLOv8        │
+ │   Three.js      │    │   WebSocket     │    │   DeepLab       │
+ └─────────────────┘    └─────────────────┘    │   PointPillars  │
+                                               └─────────────────┘
 ```
 
 ## 🚀 Quick Start
@@ -205,10 +205,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 Email: support@autonomouslabs.com
-- 🐛 Issues: [GitHub Issues](https://github.com/autonomous-labs/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/autonomous-labs/discussions)
-- 📖 Documentation: [docs.autonomouslabs.com](https://docs.autonomouslabs.com)
+- 📧 Email: -
+- 🐛 Issues: -
+- 💬 Discussions: -
+- 📖 Documentation: -
 
 ---
 
