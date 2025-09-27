@@ -1,0 +1,81 @@
+version: '3.8'
+
+# AL-0 MVP - Simplified Stack for Early Development
+# This version reduces complexity while maintaining core functionality
+
+services:
+  # Frontend - React + TypeScript
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_WS_URL=ws://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+  # Backend - FastAPI + Python (Simplified)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=sqlite:///./al_0.db
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=mvp-secret-key-change-in-production
+      - ALLOWED_ORIGINS=["http://localhost:3000"]
+      - ENABLE_GPU=false
+      - MODEL_CACHE_DIR=/app/models
+    volumes:
+      - ./backend:/app
+      - ./models:/app/models
+      - model_cache:/app/.model_cache
+    depends_on:
+      - redis
+
+  # Redis - Simple caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  # Optional: Basic monitoring (Prometheus only)
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.mvp.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=24h'
+      - '--web.enable-lifecycle'
+    profiles:
+      - monitoring
+
+volumes:
+  model_cache:
+  redis_data:
+  prometheus_data:
+
+# Usage:
+# docker-compose -f docker-compose.mvp.yml up --build
+# 
+# With monitoring:
+# docker-compose -f docker-compose.mvp.yml --profile monitoring up --build

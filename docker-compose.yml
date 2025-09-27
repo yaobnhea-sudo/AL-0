@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_WS_URL=ws://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - MODEL_CACHE_DIR=/app/models
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/al_0
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-super-secret-key-change-in-production
+      - ALLOWED_ORIGINS=["http://localhost:3000"]
+    volumes:
+      - ./backend:/app
+      - ./models:/app/models
+      - model_cache:/app/.model_cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  model_cache:
+  redis_data:

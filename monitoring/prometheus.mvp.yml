@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+
+# Simplified Prometheus configuration for MVP
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Backend API (simplified metrics)
+  - job_name: 'al-0-api'
+    static_configs:
+      - targets: ['backend:8000']
+    metrics_path: '/health'
+    scrape_interval: 60s
+
+  # Redis (basic monitoring)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    scrape_interval: 60s
